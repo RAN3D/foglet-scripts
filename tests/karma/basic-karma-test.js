@@ -23,19 +23,23 @@ SOFTWARE.
 */
 'use strict'
 
-const { runner, Server, stopper } = require('karma')
-
+const { Server, stopper } = require('karma')
+const getConfig = require('../../src/karma/karma-config.js')
+jest.setTimeout(30000)
 describe('Karma test runner', () => {
-  const server = new Server({ port: 9876, files: [], singleRun: true })
-  beforeAll(() => {
+  it('should start without crashing using default configuration', done => {
+    const config = getConfig([ 'Firefox' ], [ 'tests/karma/*' ])
+    const server = new Server(config, exitCode => {
+      expect(exitCode).toBe(0)
+      stopper.stop({ port: config.port })
+      done()
+    })
+    server.on('browser_error', done)
+    server.on('run_complete', (browsers, results) => {
+      expect(results.error).toBeFalsy()
+      expect(results.failed).toBe(0)
+      expect(results.success).toBeGreaterThan(0)
+    })
     server.start()
-  })
-
-  afterAll(() => {
-    stopper.stop({ port: 9876 })
-  })
-
-  it('should start without crashing', done => {
-    runner.run({ port: 9876 }, () => done())
   })
 })

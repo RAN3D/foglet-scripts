@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-'use strict';
+'use strict'
 
-const signaling = require('foglet-signaling-server');
+const signaling = require('foglet-signaling-server')
 
 /**
  * Get configuration settings for Karma test runner
@@ -36,20 +36,11 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
     hostname: 'localhost',
     basePath: './',
     frameworks: [ 'browserify', 'mocha', 'chai', 'express-http-server' ],
-    // TODO Karma should auto load plugins, but need to asser that
-    // plugins: [
-    //   'karma-browserify',
-    //   'karma-mocha',
-    //   'karma-chai',
-    //   'karma-mocha-reporter',
-    //   'karma-firefox-launcher',
-    //   'karma-express-http-server'
-    // ],
     files: [
       'tests/*test.js',
-      'tests/**/*test.js',
+      'tests/**/*test.js'
     ],
-    preprocessors:{
+    preprocessors: {
       'tests/*test.js': [ 'browserify' ],
       'tests/**/*test.js': [ 'browserify' ]
     },
@@ -75,7 +66,6 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
     autoWatch: true,
     browserNoActivityTimeout: 50000,
     colors: true,
-    logLevel: config.LOG_INFO,
     browsers,
     singleRun: true,
     concurrency: Infinity
