@@ -35,23 +35,48 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
   return {
     hostname: 'localhost',
     basePath: './',
-    frameworks: [ 'browserify', 'mocha', 'chai', 'express-http-server' ],
+    frameworks: [ 'mocha', 'chai', 'express-http-server' ],
     files: [
       'tests/*test.js',
       'tests/**/*test.js'
     ],
     preprocessors: {
-      'tests/*test.js': [ 'browserify' ],
-      'tests/**/*test.js': [ 'browserify' ]
+      'tests/*test.js': [ 'webpack' ],
+      'tests/**/*test.js': [ 'webpack' ]
     },
     exclude,
-    browserify: {
-      debug: true,
-      transform: [
-        [ 'babelify',
-          { presets: [ 'env' ] }
+    webpack: {
+      module: {
+        rules: [
+          {
+            enforce: 'pre',
+            test: /\.js?$/,
+            loader: 'standard-loader',
+            exclude: /(node_modules|bower_components)/,
+            options: {
+              error: false,
+              snazzy: true,
+              env: [ 'browser', 'es6', 'worker', 'mocha', 'jasmine' ],
+              globals: [ 'assert' ]
+            }
+          },
+          {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: [
+              {
+                loader: 'babel-loader',
+                options: {
+                  presets: ['env']
+                }
+              },
+              {
+                loader: 'istanbul-instrumenter-loader'
+              }
+            ]
+          }
         ]
-      ]
+      }
     },
     extensions: [ '.js' ],
     proxies: {
@@ -62,9 +87,13 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
       port: 4001,
       appVisitor: signaling
     },
-    reporters: [ 'mocha' ],
+    reporters: [ 'mocha', 'coverage' ],
+    coverageIstanbulReporter: {
+      reports: [ 'text-summary', 'lcov' ],
+      fixWebpackSourcePaths: true
+    },
     autoWatch: true,
-    browserNoActivityTimeout: 50000,
+    browserNoActivityTimeout: 30000,
     colors: true,
     browsers,
     singleRun: true,
