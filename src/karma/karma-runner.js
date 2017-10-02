@@ -23,23 +23,25 @@ SOFTWARE.
 */
 'use strict'
 
+const EventEmitter = require('events')
 const { Server, stopper } = require('karma')
 const getConfig = require('../../src/karma/karma-config.js')
-jest.setTimeout(30000)
-describe('Karma test runner', () => {
-  it('should start without crashing using default configuration', done => {
-    const config = getConfig([ 'Firefox' ], [ 'tests/karma/*' ])
-    const server = new Server(config, exitCode => {
-      expect(exitCode).toBe(0)
-      stopper.stop({ port: config.port })
-      done()
+
+class KarmaRunner extends EventEmitter {
+  constructor (browsers = [], exclude = [], callback) {
+    super()
+    this._config = getConfig(browsers, exclude)
+    this._server = new Server(this._config, exitCode => {
+      callback(exitCode)
+      stopper.stop({ port: this._config.port })
     })
-    server.on('browser_error', done)
-    server.on('run_complete', (browsers, results) => {
-      expect(results.error).toBeFalsy()
-      expect(results.failed).toBe(0)
-      expect(results.success).toBeGreaterThan(0)
-    })
-    server.start()
-  })
-})
+    this._server.on('browser_error', err => this.emit('browser_error', err))
+    this._server.on('run_complete', (browsers, results) => this.emit('run_complete', browsers, results))
+  }
+
+  run (callback) {
+    this._server.start()
+  }
+}
+
+module.exports = KarmaRunner

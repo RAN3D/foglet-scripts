@@ -63,17 +63,19 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
           {
             test: /\.js$/,
             exclude: /(node_modules|bower_components)/,
-            use: [
-              {
-                loader: 'babel-loader',
-                options: {
-                  presets: ['env']
-                }
-              },
-              {
-                loader: 'istanbul-instrumenter-loader'
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['env']
               }
-            ]
+            }
+          },
+          {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'istanbul-instrumenter-loader'
+            }
           }
         ]
       }

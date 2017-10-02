@@ -1,8 +1,10 @@
 {
   "name": "foglet-scripts",
   "version": "1.0.0",
-  "description": "Utility scripts and test harness for developing fog computing applications",
-  "main": "foglet-scripts.js",
+  "description": "Build and test foglet applications with minimal configuration",
+  "bin": {
+    "foglet-scripts": "./bin/cli.js"
+  },
   "scripts": {
     "test": "jest --notify",
     "coverage": "jest --notify --coverage"
@@ -29,6 +31,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "chai": "^4.1.2",
+    "commander": "^2.11.0",
     "foglet-signaling-server": "^0.3.1",
     "istanbul-instrumenter-loader": "^3.0.0",
     "karma": "^1.7.1",
