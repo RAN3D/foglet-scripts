@@ -23,24 +23,39 @@ SOFTWARE.
 */
 'use strict'
 
-const KarmaRunner = require('../../src/karma/karma-runner.js')
-jest.setTimeout(30000)
-describe('Karma test runner', () => {
-  it('should start without crashing using default configuration', done => {
-    const config = {
-      browsers: [ 'Firefox' ],
-      exclude: [ 'tests/karma/*' ]
-    }
-    const runner = new KarmaRunner(config, exitCode => {
-      expect(exitCode).toBe(0)
-      done()
+const pathConnect = (peers, duplex = false) => {
+  const pairs = []
+  for (let ind = 0; ind < peers.length - 1; ind++) {
+    pairs.push([ peers[ind], peers[ind + 1] ])
+  }
+  return Promise.all(pairs.map(pair => {
+    return pair[0].connection(pair[1])
+    .then(() => {
+      if (duplex) return pair[1].connection(pair[0])
+      return Promise.resolve()
     })
-    runner.on('browser_error', done)
-    runner.on('run_complete', (browsers, results) => {
-      expect(results.error).toBeFalsy()
-      expect(results.failed).toBe(0)
-      expect(results.success).toBeGreaterThan(0)
+  }))
+}
+
+const overlayConnect = (index, ...peers) => {
+  return peers.reduce((prev, peer) => {
+    return prev.then(() => {
+      peer.share(index)
+      return peer.connection(null, index)
     })
-    runner.run()
-  })
-})
+  }, Promise.resolve())
+}
+
+const doneAfter = (limit, done) => {
+  let cpt = 0
+  return () => {
+    cpt++
+    if (cpt >= limit) done()
+  }
+}
+
+module.exports = {
+  pathConnect,
+  overlayConnect,
+  doneAfter
+}

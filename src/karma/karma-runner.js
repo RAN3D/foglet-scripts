@@ -28,12 +28,13 @@ const { Server, stopper } = require('karma')
 const getConfig = require('../../src/karma/karma-config.js')
 
 class KarmaRunner extends EventEmitter {
-  constructor (browsers = [], exclude = [], callback) {
+  constructor (jsonConfig, callback) {
     super()
-    this._config = getConfig(browsers, exclude)
-    this._server = new Server(this._config, exitCode => {
+    this._jsonConfig = jsonConfig
+    this._karmaConfig = getConfig(jsonConfig.browsers, jsonConfig.exclude, jsonConfig.timeout, jsonConfig.lint)
+    this._server = new Server(this._karmaConfig, exitCode => {
       callback(exitCode)
-      stopper.stop({ port: this._config.port })
+      stopper.stop({ port: this._karmaConfig.port })
     })
     this._server.on('browser_error', err => this.emit('browser_error', err))
     this._server.on('run_complete', (browsers, results) => this.emit('run_complete', browsers, results))
