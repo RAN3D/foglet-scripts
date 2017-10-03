@@ -27,11 +27,47 @@ const signaling = require('foglet-signaling-server')
 
 /**
  * Get configuration settings for Karma test runner
- * @param {string[]} browsers - Browsers to tests against (see Karma doc for possible values)
- * @param {string[]} exclude - Files to exclude from tests
+ * @param {string[]} [browsers=[]] - Browsers to tests against (see Karma doc for possible values)
+ * @param {string[]} [exclude=[]] - Files to exclude from tests
+ * @param {number} [timeout=5000] - Mocha timeout in ms
+ * @param {boolean} [lint=true] - True if files must be linted, False otherwise
  * @return {Object} Karma configuration
  */
-const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000) => {
+const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true) => {
+  // configure webpack loaders
+  const webpackRules = [
+    {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['env']
+        }
+      }
+    },
+    {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'istanbul-instrumenter-loader'
+      }
+    }
+  ]
+  if (lint) {
+    webpackRules.push({
+      enforce: 'pre',
+      test: /\.js?$/,
+      loader: 'standard-loader',
+      exclude: /(node_modules|bower_components)/,
+      options: {
+        error: false,
+        snazzy: true,
+        env: [ 'browser', 'es6', 'worker', 'mocha', 'jasmine' ],
+        globals: [ 'assert' ]
+      }
+    })
+  }
   return {
     hostname: 'localhost',
     basePath: './',
@@ -47,37 +83,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000) => {
     exclude,
     webpack: {
       module: {
-        rules: [
-          {
-            enforce: 'pre',
-            test: /\.js?$/,
-            loader: 'standard-loader',
-            exclude: /(node_modules|bower_components)/,
-            options: {
-              error: false,
-              snazzy: true,
-              env: [ 'browser', 'es6', 'worker', 'mocha', 'jasmine' ],
-              globals: [ 'assert' ]
-            }
-          },
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['env']
-              }
-            }
-          },
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-              loader: 'istanbul-instrumenter-loader'
-            }
-          }
-        ]
+        rules: webpackRules
       }
     },
     extensions: [ '.js' ],
