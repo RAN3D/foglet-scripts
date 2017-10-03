@@ -31,7 +31,7 @@ const signaling = require('foglet-signaling-server')
  * @param {string[]} exclude - Files to exclude from tests
  * @return {Object} Karma configuration
  */
-const getKarmaConfig = (browsers = [], exclude = []) => {
+const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000) => {
   return {
     hostname: 'localhost',
     basePath: './',
@@ -93,6 +93,11 @@ const getKarmaConfig = (browsers = [], exclude = []) => {
     coverageIstanbulReporter: {
       reports: [ 'text-summary', 'lcov' ],
       fixWebpackSourcePaths: true
+    },
+    client: {
+      mocha: {
+        timeout
+      }
     },
     autoWatch: true,
     browserNoActivityTimeout: 30000,
