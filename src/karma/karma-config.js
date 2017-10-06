@@ -24,6 +24,7 @@ SOFTWARE.
 'use strict'
 
 const signaling = require('foglet-signaling-server')
+const { constants } = require('karma')
 
 /**
  * Get configuration settings for Karma test runner
@@ -109,6 +110,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
     browserNoActivityTimeout: 30000,
     colors: true,
     browsers,
+    logLevel: constants.LOG_INFO,
     singleRun: true,
     concurrency: Infinity
   }
