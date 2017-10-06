@@ -44,7 +44,7 @@ program.on('--help', () => {
 
 program.parse(process.argv)
 
-const config = readConfig(packageInfos)
+const config = readConfig(programPackageInfos)
 
 if (config.browsers.length <= 0) {
   process.stderr.write('Error: you must specify at least one browser\n')
