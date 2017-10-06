@@ -23,24 +23,12 @@ SOFTWARE.
 */
 'use strict'
 
-const KarmaRunner = require('../../src/karma/karma-runner.js')
-jest.setTimeout(30000)
-describe('Karma test runner', () => {
-  it('should start without crashing using default configuration', done => {
-    const config = {
-      browsers: [ 'Firefox' ],
-      exclude: [ 'tests/karma/*', 'tests/utils/*.js' ]
-    }
-    const runner = new KarmaRunner(config, exitCode => {
-      expect(exitCode).toBe(0)
-      done()
-    })
-    runner.on('browser_error', done)
-    runner.on('run_complete', (browsers, results) => {
-      expect(results.error).toBeFalsy()
-      expect(results.failed).toBe(0)
-      expect(results.success).toBeGreaterThan(0)
-    })
-    runner.run()
-  })
+const { doneAfter } = require('../../src/utils/utils.js')
+
+describe('doneAfter', () => {
+  it('should call done after n calls', doneAfter(3, done => {
+    done()
+    done()
+    done()
+  }))
 })

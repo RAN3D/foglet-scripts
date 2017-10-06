@@ -23,39 +23,30 @@ SOFTWARE.
 */
 'use strict'
 
-const pathConnect = (peers, duplex = false) => {
-  const pairs = []
-  for (let ind = 0; ind < peers.length - 1; ind++) {
-    pairs.push([ peers[ind], peers[ind + 1] ])
-  }
-  return Promise.all(pairs.map(pair => {
-    return pair[0].connection(pair[1])
-    .then(() => {
-      if (duplex) return pair[1].connection(pair[0])
-      return Promise.resolve()
-    })
-  }))
-}
+const { overlayConnect, pathConnect, starConnect } = require('./connection.js')
 
-const overlayConnect = (index, ...peers) => {
-  return peers.reduce((prev, peer) => {
-    return prev.then(() => {
-      peer.share(index)
-      return peer.connection(null, index)
+/**
+ * Perform a Mocha/Jasmine test with the `done` callback, but only terminate the
+ * test after `done` has been called `limit` times.
+ * @param  {integer} limit - How many times `done` should be called
+ * @param  {function} test  - Test function callbed with the `done` callback
+ * @return {function} Test function for Mocha/Jasmine `it`
+ */
+const doneAfter = (limit, test) => {
+  return done => {
+    let cpt = 0
+    test(() => {
+      cpt++
+      if (cpt >= limit) done()
     })
-  }, Promise.resolve())
-}
-
-const doneAfter = (limit, done) => {
-  let cpt = 0
-  return () => {
-    cpt++
-    if (cpt >= limit) done()
   }
 }
 
 module.exports = {
-  pathConnect,
-  overlayConnect,
+  connect: {
+    path: pathConnect,
+    star: starConnect,
+    overlay: overlayConnect
+  },
   doneAfter
 }

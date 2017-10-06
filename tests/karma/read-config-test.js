@@ -47,7 +47,8 @@ describe('Configuration reader', () => {
         'Firefox'
       ],
       exclude: [
-        'tests/karma/*.js'
+        'tests/karma/*.js',
+        'tests/utils/*.js'
       ],
       timeout: 5000,
       lint: false,

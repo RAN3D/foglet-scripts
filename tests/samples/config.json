@@ -4,7 +4,8 @@
       "Firefox"
     ],
     "exclude": [
-      "tests/karma/*.js"
+      "tests/karma/*.js",
+      "tests/utils/*.js"
     ],
     "lint": false,
     "build": {
