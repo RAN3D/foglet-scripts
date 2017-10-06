@@ -23,7 +23,6 @@ SOFTWARE.
 */
 'use strict'
 
-const path = require('path')
 const signaling = require('foglet-signaling-server')
 
 /**

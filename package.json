@@ -4,7 +4,7 @@
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/foglet-utils/utils.js",
   "bin": {
-    "foglet-scripts": "./bin/cli.js"
+    "foglet-scripts": "./bin/foglet-scripts.js"
   },
   "scripts": {
     "test": "jest --notify",

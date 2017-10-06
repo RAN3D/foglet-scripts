@@ -1,0 +1,17 @@
+{
+  "foglet-scripts": {
+    "browsers": [
+      "Firefox"
+    ],
+    "exclude": [
+      "tests/karma/*.js"
+    ],
+    "lint": false,
+    "build": {
+      "entry": "index.js",
+      "buildLibrary": true,
+      "name": "foglet-core",
+      "export": "global"
+    }
+  }
+}
