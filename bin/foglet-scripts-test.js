@@ -25,6 +25,7 @@ SOFTWARE.
 'use strict'
 
 const KarmaRunner = require('../src/karma/karma-runner.js')
+const readConfig = require('../src/read-config.js')
 const program = require('commander')
 const packageInfos = require('../package.json')
 const programPackageInfos = require(`${process.cwd()}/package.json`)
@@ -32,26 +33,26 @@ const programPackageInfos = require(`${process.cwd()}/package.json`)
 program
   .version(packageInfos.version)
   .description('Run tests with Karma using the specified browsers')
-  .usage('<browsers...> [options]')
-  .option('-e, --exclude <file>', 'exclude the file from Karma tests suite')
+  .usage('[options]')
 
 program.on('--help', () => {
   process.stdout.write('\n  Example:\n')
   process.stdout.write('\n')
-  process.stdout.write('    foglet-scripts test Firefox Chrome\n')
-  process.stdout.write('    foglet-scripts test Firefox -e \'tests/bad-files/*\'\n')
+  process.stdout.write('    foglet-scripts test\n')
   process.stdout.write('\n')
 })
 
 program.parse(process.argv)
 
-if (program.args.length <= 0) {
-  process.stderr.write('Error: you must specify at leats one browser\n')
+const config = readConfig(packageInfos)
+
+if (config.browsers.length <= 0) {
+  process.stderr.write('Error: you must specify at least one browser\n')
   process.exit(1)
 }
 
 // check for karma launchers corresponding to browsers
-program.args.forEach(browser => {
+config.browsers.forEach(browser => {
   const launcher = `karma-${browser.toLowerCase()}-launcher`
   if ((!(launcher in programPackageInfos.dependencies)) && (!(launcher in programPackageInfos.devDependencies))) {
     process.stderr.write(`Error: you want to run tests using ${browser}, but the corresponding Karma launcher is not installed\n
@@ -60,12 +61,7 @@ program.args.forEach(browser => {
   }
 })
 
-const exclude = []
-if (program.exclude !== undefined) {
-  exclude.push(program.exclude)
-}
-
-const runner = new KarmaRunner(program.args, exclude, exitCode => {
+const runner = new KarmaRunner(config, exitCode => {
   process.stdout.write('Tests completed\n')
   process.exit(exitCode)
 })

@@ -23,8 +23,6 @@ SOFTWARE.
 */
 'use strict'
 
-const fs = require('fs')
-
 const DEFAULT_CONFIG = {
   browsers: [],
   exclude: [],
@@ -34,12 +32,11 @@ const DEFAULT_CONFIG = {
 
 /**
  * Read config from a package.json file
- * @param  {string} packagePath - Path to the package.json file
+ * @param  {Object} packageInfos - Package informations (i.e. package.json)
  * @return {Object} Configuration file
  */
-const readConfig = packagePath => {
+const readConfig = packageInfos => {
   const config = DEFAULT_CONFIG
-  let packageInfos = JSON.parse(fs.readFileSync(packagePath, { encoding: 'utf-8' }))
   if (!('foglet-scripts' in packageInfos)) return config
   packageInfos = packageInfos['foglet-scripts']
   for (let prop in DEFAULT_CONFIG) {

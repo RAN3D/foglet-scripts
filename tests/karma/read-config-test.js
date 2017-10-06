@@ -23,13 +23,25 @@ SOFTWARE.
 */
 'use strict'
 
+const fs = require('fs')
 const path = require('path')
 const readConfig = require('../../src/read-config.js')
 
 describe('Configuration reader', () => {
+  it('should use default config values', () => {
+    const config = readConfig({})
+    const expected = {
+      browsers: [],
+      exclude: [],
+      timeout: 5000,
+      lint: true
+    }
+    expect(config).toEqual(expected)
+  })
   it('should read a config from a package.json file', () => {
     const packagePath = path.resolve(__dirname, '../samples/config.json')
-    const config = readConfig(packagePath)
+    const packageInfos = JSON.parse(fs.readFileSync(packagePath, { encoding: 'utf-8' }))
+    const config = readConfig(packageInfos)
     const expected = {
       browsers: [
         'Firefox'
