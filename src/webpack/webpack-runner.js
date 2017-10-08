@@ -23,34 +23,18 @@ SOFTWARE.
 */
 'use strict'
 
-const DEFAULT_CONFIG = {
-  browsers: [],
-  exclude: [],
-  timeout: 5000,
-  lint: true,
-  build: {
-    entry: 'index.js',
-    output: {
-      path: 'dist',
-      filename: 'main.js'
-    },
-    webpack: null
+const webpack = require('webpack')
+const getConfig = require('./webpack-config.js')
+
+class WebpackRunner {
+  constructor (options) {
+    this._config = getConfig(options.build.entry, options.build.output, options.build.webpack, options.lint)
+    this._runner = webpack(this._options)
+  }
+
+  run (callback) {
+    this._runner.run(callback)
   }
 }
 
-/**
- * Read config from a package.json file
- * @param  {Object} packageInfos - Package informations (i.e. package.json)
- * @return {Object} Configuration file
- */
-const readConfig = packageInfos => {
-  const config = DEFAULT_CONFIG
-  if (!('foglet-scripts' in packageInfos)) return config
-  packageInfos = packageInfos['foglet-scripts']
-  for (let prop in DEFAULT_CONFIG) {
-    if (!(prop in packageInfos)) packageInfos[prop] = DEFAULT_CONFIG[prop]
-  }
-  return packageInfos
-}
-
-module.exports = readConfig
+module.exports = WebpackRunner

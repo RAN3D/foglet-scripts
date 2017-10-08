@@ -23,34 +23,54 @@ SOFTWARE.
 */
 'use strict'
 
-const DEFAULT_CONFIG = {
-  browsers: [],
-  exclude: [],
-  timeout: 5000,
-  lint: true,
-  build: {
-    entry: 'index.js',
-    output: {
+const getConfig = (entry = 'index.js', output = null, webpack = null, lint = true) => {
+  if (output === null) {
+    output = {
       path: 'dist',
       filename: 'main.js'
+    }
+  }
+  const webpackRules = [
+    {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: ['source-map-loader'],
+      enforce: 'pre'
     },
-    webpack: null
+    {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['minify']
+        }
+      }
+    }
+  ]
+  if (lint) {
+    webpackRules.push({
+      enforce: 'pre',
+      test: /\.js?$/,
+      loader: 'standard-loader',
+      exclude: /(node_modules|bower_components)/,
+      options: {
+        error: false,
+        snazzy: true,
+        env: [ 'browser', 'es6', 'worker', 'mocha', 'jasmine' ],
+        globals: [ 'assert' ]
+      }
+    })
   }
+  const baseOptions = {
+    entry,
+    output,
+    module: {
+      rules: webpackRules
+    }
+  }
+  if (webpack === null || webpack === undefined) return baseOptions
+  return Object.assign(webpack, baseOptions)
 }
 
-/**
- * Read config from a package.json file
- * @param  {Object} packageInfos - Package informations (i.e. package.json)
- * @return {Object} Configuration file
- */
-const readConfig = packageInfos => {
-  const config = DEFAULT_CONFIG
-  if (!('foglet-scripts' in packageInfos)) return config
-  packageInfos = packageInfos['foglet-scripts']
-  for (let prop in DEFAULT_CONFIG) {
-    if (!(prop in packageInfos)) packageInfos[prop] = DEFAULT_CONFIG[prop]
-  }
-  return packageInfos
-}
-
-module.exports = readConfig
+module.exports = getConfig

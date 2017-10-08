@@ -25,7 +25,7 @@ SOFTWARE.
 
 const EventEmitter = require('events')
 const { Server, stopper } = require('karma')
-const getConfig = require('../../src/karma/karma-config.js')
+const getConfig = require('./karma-config.js')
 
 class KarmaRunner extends EventEmitter {
   constructor (jsonConfig, callback) {
