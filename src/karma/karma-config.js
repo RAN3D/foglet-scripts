@@ -25,6 +25,7 @@ SOFTWARE.
 
 const signaling = require('foglet-signaling-server')
 const { constants } = require('karma')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 /**
  * Get configuration settings for Karma test runner
@@ -85,7 +86,13 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
     webpack: {
       module: {
         rules: webpackRules
-      }
+      },
+      plugins: [
+        new UglifyJSPlugin({
+          sourceMap: true
+        })
+      ],
+      devtool: 'source-map'
     },
     extensions: [ '.js' ],
     proxies: {
