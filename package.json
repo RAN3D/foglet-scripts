@@ -1,12 +1,13 @@
 {
   "name": "foglet-scripts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/utils/utils.js",
   "bin": {
     "foglet-scripts": "./bin/foglet-scripts.js"
   },
   "scripts": {
+    "lint": "standard",
     "test": "jest --notify",
     "coverage": "jest --notify --coverage"
   },
@@ -59,7 +60,8 @@
     "env": [
       "node",
       "jest"
-    ]
+    ],
+    "globals": [ "assert" ]
   },
   "jest": {
     "verbose": true,
