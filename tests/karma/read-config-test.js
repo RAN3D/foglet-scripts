@@ -34,7 +34,15 @@ describe('Configuration reader', () => {
       browsers: [],
       exclude: [],
       timeout: 5000,
-      lint: true
+      lint: true,
+      build: {
+        entry: 'index.js',
+        output: {
+          path: 'dist',
+          filename: 'main.js'
+        },
+        webpack: null
+      }
     }
     expect(config).toEqual(expected)
   })
