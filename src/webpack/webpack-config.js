@@ -23,6 +23,8 @@ SOFTWARE.
 */
 'use strict'
 
+const merge = require('lodash.merge')
+
 const getConfig = (entry = 'index.js', output = null, webpack = null, lint = true) => {
   if (output === null) {
     output = {
@@ -70,7 +72,7 @@ const getConfig = (entry = 'index.js', output = null, webpack = null, lint = tru
     }
   }
   if (webpack === null || webpack === undefined) return baseOptions
-  return Object.assign(webpack, baseOptions)
+  return merge(baseOptions, webpack)
 }
 
 module.exports = getConfig
