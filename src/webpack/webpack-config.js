@@ -24,28 +24,17 @@ SOFTWARE.
 'use strict'
 
 const merge = require('lodash.merge')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const getConfig = (entry = 'index.js', output = null, webpack = null, lint = true) => {
-  if (output === null) {
-    output = {
-      path: 'dist',
-      filename: 'main.js'
-    }
-  }
   const webpackRules = [
-    {
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: ['source-map-loader'],
-      enforce: 'pre'
-    },
     {
       test: /\.js$/,
       exclude: /(node_modules|bower_components)/,
       use: {
         loader: 'babel-loader',
         options: {
-          presets: ['minify']
+          presets: ['env']
         }
       }
     }
@@ -69,7 +58,13 @@ const getConfig = (entry = 'index.js', output = null, webpack = null, lint = tru
     output,
     module: {
       rules: webpackRules
-    }
+    },
+    plugins: [
+      new UglifyJSPlugin({
+        sourceMap: true
+      })
+    ],
+    devtool: 'source-map'
   }
   if (webpack === null || webpack === undefined) return baseOptions
   return merge(baseOptions, webpack)

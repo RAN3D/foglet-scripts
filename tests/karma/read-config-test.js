@@ -36,10 +36,10 @@ describe('Configuration reader', () => {
       timeout: 5000,
       lint: true,
       build: {
-        entry: 'index.js',
+        entry: './index.js',
         output: {
-          path: 'dist',
-          filename: 'main.js'
+          path: path.resolve(process.cwd(), 'dist'),
+          filename: '[name].js'
         },
         webpack: null
       }
@@ -61,10 +61,10 @@ describe('Configuration reader', () => {
       timeout: 5000,
       lint: false,
       build: {
-        entry: 'index.js',
+        entry: './index.js',
         output: {
-          path: 'dist',
-          filename: 'main.js'
+          path: path.resolve(process.cwd(), 'dist'),
+          filename: '[name].js'
         },
         webpack: null
       }

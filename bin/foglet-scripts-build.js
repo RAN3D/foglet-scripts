@@ -54,6 +54,11 @@ runner.run((err, stats) => {
     process.stderr.write('\n')
     process.exit(1)
   }
+  process.stdout.write(stats.toString({
+    chunks: false,
+    colors: true
+  }))
+  process.stdout.write('\n')
   process.stdout.write('Build complete!\n')
   process.exit(0)
 })

@@ -24,6 +24,7 @@ SOFTWARE.
 'use strict'
 
 const merge = require('lodash.merge')
+const path = require('path')
 
 const DEFAULT_CONFIG = {
   browsers: [],
@@ -31,10 +32,10 @@ const DEFAULT_CONFIG = {
   timeout: 5000,
   lint: true,
   build: {
-    entry: 'index.js',
+    entry: './index.js',
     output: {
-      path: 'dist',
-      filename: 'main.js'
+      path: path.resolve(process.cwd(), 'dist'),
+      filename: '[name].js'
     },
     webpack: null
   }
