@@ -62,9 +62,11 @@ describe('Configuration reader', () => {
       lint: false,
       build: {
         entry: 'index.js',
-        buildLibrary: true,
-        name: 'foglet-core',
-        export: 'global'
+        output: {
+          path: 'dist',
+          filename: 'main.js'
+        },
+        webpack: null
       }
     }
     expect(config).toEqual(expected)

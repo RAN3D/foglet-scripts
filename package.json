@@ -45,6 +45,7 @@
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.4",
     "karma-webpack": "^2.0.4",
+    "lodash.merge": "^4.6.0",
     "mocha": "^3.5.3",
     "source-map-loader": "^0.2.2",
     "standard": "^10.0.3",
@@ -61,7 +62,9 @@
       "node",
       "jest"
     ],
-    "globals": [ "assert" ]
+    "globals": [
+      "assert"
+    ]
   },
   "jest": {
     "verbose": true,

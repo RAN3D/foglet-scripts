@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
 MIT License
 
@@ -23,31 +24,36 @@ SOFTWARE.
 */
 'use strict'
 
-const merge = require('lodash.merge')
+const WebpackRunner = require('../src/webpack/webpack-runner.js')
+const readConfig = require('../src/read-config.js')
+const program = require('commander')
+const packageInfos = require('../package.json')
+const programPackageInfos = require(`${process.cwd()}/package.json`)
 
-const DEFAULT_CONFIG = {
-  browsers: [],
-  exclude: [],
-  timeout: 5000,
-  lint: true,
-  build: {
-    entry: 'index.js',
-    output: {
-      path: 'dist',
-      filename: 'main.js'
-    },
-    webpack: null
+program
+  .version(packageInfos.version)
+  .description('Build foglet application using Webpack')
+  .usage('[options]')
+
+program.on('--help', () => {
+  process.stdout.write('\n  Example:\n')
+  process.stdout.write('\n')
+  process.stdout.write('    foglet-scripts build\n')
+  process.stdout.write('\n')
+})
+
+program.parse(process.argv)
+
+const config = readConfig(programPackageInfos)
+
+const runner = new WebpackRunner(config)
+
+runner.run((err, stats) => {
+  if (err || stats.hasErrors()) {
+    process.stderr.write(err)
+    process.stderr.write('\n')
+    process.exit(1)
   }
-}
-
-/**
- * Read config from a package.json file
- * @param  {Object} packageInfos - Package informations (i.e. package.json)
- * @return {Object} Configuration file
- */
-const readConfig = packageInfos => {
-  if (!('foglet-scripts' in packageInfos)) return DEFAULT_CONFIG
-  return merge(DEFAULT_CONFIG, packageInfos['foglet-scripts'])
-}
-
-module.exports = readConfig
+  process.stdout.write('Build complete!\n')
+  process.exit(0)
+})

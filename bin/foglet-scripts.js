@@ -30,5 +30,6 @@ const packageInfos = require('../package.json')
 program
   .version(packageInfos.version)
   .description('Build and test foglet applications with minimal configuration')
+  .command('build', 'Build foglet application using Webpack')
   .command('test', 'Run tests with Karma using the specified browsers')
   .parse(process.argv)
