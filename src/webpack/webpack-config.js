@@ -30,7 +30,7 @@ const getConfig = (entry = 'index.js', output = null, webpack = null, lint = tru
   const webpackRules = [
     {
       test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
+      // exclude: /(node_modules|bower_components)/,
       use: {
         loader: 'babel-loader',
         options: {
