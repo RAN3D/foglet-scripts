@@ -40,7 +40,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
   const webpackRules = [
     {
       test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
+      // exclude: /(node_modules|bower_components)/,
       use: {
         loader: 'babel-loader',
         options: {
