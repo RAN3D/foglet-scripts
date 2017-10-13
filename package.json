@@ -1,6 +1,6 @@
 {
   "name": "foglet-scripts",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/utils/utils.js",
   "bin": {
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/RAN3D/foglet-scripts#readme",
   "dependencies": {
-    "babel": "^6.23.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "chai": "^4.1.2",
