@@ -25,6 +25,7 @@ SOFTWARE.
 
 const signaling = require('foglet-signaling-server')
 const { constants } = require('karma')
+const glob = require('glob')
 
 /**
  * Get configuration settings for Karma test runner
@@ -32,9 +33,10 @@ const { constants } = require('karma')
  * @param {string[]} [exclude=[]] - Files to exclude from tests
  * @param {number} [timeout=5000] - Mocha timeout in ms
  * @param {boolean} [lint=true] - True if files must be linted, False otherwise
+ * @param {boolean} [sharding=false] - True if you want to use the sharding options
  * @return {Object} Karma configuration
  */
-const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true) => {
+const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true, sharding = false) => {
   // configure webpack loaders
   const webpackRules = [
     {
@@ -69,10 +71,11 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
       }
     })
   }
-  return {
+
+  let result = {
     hostname: 'localhost',
     basePath: './',
-    frameworks: [ 'mocha', 'chai', 'express-http-server', 'sharding' ],
+    frameworks: [ 'mocha', 'chai', 'express-http-server' ],
     files: [
       'tests/*test.js',
       'tests/**/*test.js'
@@ -97,7 +100,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
       port: 4001,
       appVisitor: signaling
     },
-    reporters: [ 'mocha', 'coverage', 'sharding' ],
+    reporters: [ 'mocha', 'coverage' ],
     coverageIstanbulReporter: {
       reports: [ 'text-summary', 'lcov' ],
       fixWebpackSourcePaths: true
@@ -115,6 +118,23 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
     singleRun: true,
     concurrency: Infinity
   }
+
+  if (sharding) {
+    result.frameworks.push('sharding')
+    result.reporters.push('sharding')
+		let files = []
+		try {
+			files = glob.sync(`${process.cwd()}/tests/**/*.js`)
+		} catch (e) {
+			// noop
+		}
+		const ref = result.browsers[0]
+		// now reset the set of browsers
+		result.browsers = [];
+		if(files.length > 0) files.forEach(f => result.browsers.push(ref));
+  }
+
+  return result
 }
 
 module.exports = getKarmaConfig

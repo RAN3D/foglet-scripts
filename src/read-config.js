@@ -28,6 +28,7 @@ const path = require('path')
 
 const DEFAULT_CONFIG = {
   browsers: [],
+  sharding: false,
   exclude: [],
   timeout: 5000,
   lint: true,

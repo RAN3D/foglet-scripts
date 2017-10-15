@@ -32,6 +32,7 @@ describe('Configuration reader', () => {
     const config = readConfig({})
     const expected = {
       browsers: [],
+      sharding: false,
       exclude: [],
       timeout: 5000,
       lint: true,
@@ -54,6 +55,7 @@ describe('Configuration reader', () => {
       browsers: [
         'Firefox'
       ],
+      sharding: false,
       exclude: [
         'tests/karma/*.js',
         'tests/utils/*.js'

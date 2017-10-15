@@ -24,6 +24,7 @@ SOFTWARE.
 'use strict'
 
 const { overlayConnect, pathConnect, starConnect } = require('./connection.js')
+const { clearFoglets } = require('./clear.js')
 
 /**
  * Perform a Mocha/Jasmine test with the `done` callback, but only terminate the
@@ -43,6 +44,7 @@ const doneAfter = (limit, test) => {
 }
 
 module.exports = {
+  clear: clearFoglets,
   connect: {
     path: pathConnect,
     star: starConnect,
