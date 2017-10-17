@@ -60,7 +60,6 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
       }
     }
   ]
-  console.log(webpackRules);
   if (lint) {
     webpackRules.push({
       enforce: 'pre',
