@@ -25,6 +25,7 @@ SOFTWARE.
 
 const signaling = require('foglet-signaling-server')
 const { constants } = require('karma')
+const lmerge = require('lodash.merge');
 
 /**
  * Get configuration settings for Karma test runner
@@ -34,19 +35,23 @@ const { constants } = require('karma')
  * @param {boolean} [lint=true] - True if files must be linted, False otherwise
  * @return {Object} Karma configuration
  */
-const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true) => {
+const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true, webpack = false) => {
   // configure webpack loaders
-  const webpackRules = [
-    {
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['env']
-        }
+  let defaultBabelLoaderRules = {
+    test: /\.js$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['env']
       }
-    },
+    }
+  };
+  if(webpack) {
+    const externalWebpackKarmaRules = require(`${process.cwd()}/${webpack}`)
+    defaultBabelLoaderRules = lmerge(defaultBabelLoaderRules, externalWebpackKarmaRules);
+  }
+  const webpackRules = [ defaultBabelLoaderRules ,
     {
       test: /\.js$/,
       exclude: /(node_modules|bower_components)/,
@@ -55,6 +60,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
       }
     }
   ]
+  console.log(webpackRules);
   if (lint) {
     webpackRules.push({
       enforce: 'pre',

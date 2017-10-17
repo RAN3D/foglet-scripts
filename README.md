@@ -77,6 +77,31 @@ If you want to build a library, you can use the same options as webpack for [aut
 }
 ```
 
+Beyond the limit, you can completely specified the webpack.config.js for your build:
+
+```json
+"foglet-scripts": {
+  "build": {
+    ...
+    "webpack": {
+      "otherWebpackSettings" : "otherWebpackValues"
+    }
+  }
+}
+```
+
+If you need to use a webpack.config.js files instead of using package.json settings; it will merge your config file with our config file:
+```json
+"foglet-scripts": {
+  "build": {
+    ...
+    "webpack": {
+      "externalConfig": "./config/webpack.config.js"
+    }
+  }
+}
+```
+
 ## Testing foglet applications
 
 Install some Karma launchers to execute tests against browsers, *e.g.* Firefox.
@@ -111,6 +136,29 @@ describe('some awesome test', () => {
 Finally, let's test!
 ```
 npm test
+```
+
+By default we exclude node_modules/bower_components but if you have problems with required es6 modules, you can specified babel-loader rules to correctly transform es6 modules:
+
+```json
+"foglet-scripts": {
+    "browsers": [
+      "Firefox"
+    ],
+    "webpack" :"./config/babel-loader.config.js"
+  }
+```
+```js
+module.exports = {
+  test: /\.js$/,
+  exclude: /(node_modules|bower_components)\/(?!(moduleA|moduleB)\/).*/,
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: ['env']
+    }
+  }
+}
 ```
 
 # Linting
