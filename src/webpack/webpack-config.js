@@ -61,7 +61,12 @@ const getConfig = (entry = 'index.js', output = null, webpack = null, lint = tru
     devtool: 'source-map'
   }
   if (webpack === null || webpack === undefined) return baseOptions
-  return merge(baseOptions, webpack)
+  if(webpack.externalConfig) {
+    const externalConfig = require(`${process.cwd()}/${webpack.externalConfig}`)
+    return merge(baseOptions, externalConfig);
+  } else {
+    return merge(baseOptions, webpack)
+  }
 }
 
 module.exports = getConfig
