@@ -77,7 +77,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
   return {
     hostname: 'localhost',
     basePath: './',
-    frameworks: [ 'mocha', 'chai', 'express-http-server', 'sharding' ],
+    frameworks: [ 'mocha', 'chai', 'express-http-server' ],
     files: [
       'tests/*test.js',
       'tests/**/*test.js'
@@ -102,7 +102,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
       port: 4001,
       appVisitor: signaling
     },
-    reporters: [ 'mocha', 'coverage', 'sharding' ],
+    reporters: [ 'mocha', 'coverage' ],
     coverageIstanbulReporter: {
       reports: [ 'text-summary', 'lcov' ],
       fixWebpackSourcePaths: true
