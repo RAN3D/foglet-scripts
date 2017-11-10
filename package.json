@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "standard",
     "test": "jest --notify",
+    "test-build": "node ./bin/foglet-scripts.js build -c ./tests/webpack-custom/webpack-custom-config.js && node tests/webpack-custom/indexTest.js",
     "coverage": "jest --notify --coverage"
   },
   "repository": {
@@ -31,9 +32,8 @@
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "commander": "^2.11.0",
     "foglet-signaling-server": "^0.3.1",
     "istanbul-instrumenter-loader": "^3.0.0",
     "karma": "^1.7.1",
@@ -42,8 +42,8 @@
     "karma-express-http-server": "0.0.1",
     "karma-istanbul": "0.0.2",
     "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.4",
-    "karma-webpack": "^2.0.4",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-webpack": "^2.0.5",
     "lodash.merge": "^4.6.0",
     "mocha": "^3.5.3",
     "standard": "^10.0.3",
