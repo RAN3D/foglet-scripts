@@ -50,6 +50,43 @@ Build configuration is specified in the `package.json`:
 }
 ```
 
+Or in foglet-config.js at the root of your package:
+(**THIS CONFIGURATION FILE OVERRIDE COMPLETELY THE PREVIOUS package.json CONFIG**) 
+```js
+// Default configuration file
+module.exports = {
+  browsers: [],
+  exclude: [],
+  timeout: 5000,
+  lint: true,
+  build: {
+    entry: './index.js',
+    output: {
+      "path": require('path').resolve(process.cwd(), 'dist'),
+      "filename": "index.bundle.js",
+      "library": "index",
+      "libraryTarget": "umd",
+      "umdNamedDefine": true
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['env']
+            }
+          }
+        }
+      ]
+    },
+    devtool: 'source-map'
+  }
+};
+```
+
 By default, `foglet-scripts` looks for `index.js` at the root of the project, use it
 as the entry file for the application/library and output the bundle in `dist/`.
 Source maps are automatically generated alongside the bundle.
