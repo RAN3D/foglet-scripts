@@ -26,29 +26,23 @@ SOFTWARE.
 const merge = require('lodash.merge')
 const path = require('path')
 
-const DEFAULT_CONFIG = {
-  browsers: [],
-  exclude: [],
-  timeout: 5000,
-  lint: true,
-  build: {
-    entry: './index.js',
-    output: {
-      path: path.resolve(process.cwd(), 'dist'),
-      filename: '[name].js'
-    },
-    webpack: null
-  }
-}
+const DEFAULT_CONFIG = require('./default-config.js');
 
 /**
  * Read config from a package.json file
  * @param  {Object} packageInfos - Package informations (i.e. package.json)
  * @return {Object} Configuration file
  */
-const readConfig = packageInfos => {
-  if (!('foglet-scripts' in packageInfos)) return DEFAULT_CONFIG
-  return merge(DEFAULT_CONFIG, packageInfos['foglet-scripts'])
+const readConfig = (packageInfos, specifiedConfigFile = false) => {
+  // we prefer the config file before the package.json informations
+  let config = DEFAULT_CONFIG;
+  if(specifiedConfigFile){
+    config = specifiedConfigFile;
+  } else if ('foglet-scripts' in packageInfos) {
+    config = merge(config, packageInfos['foglet-scripts'])
+  }
+  // console.log('ReadConfig: ', JSON.stringify(config, null, '\t'));
+  return config;
 }
 
 module.exports = readConfig

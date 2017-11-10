@@ -29,6 +29,13 @@ const readConfig = require('../src/read-config.js')
 const program = require('commander')
 const packageInfos = require('../package.json')
 const programPackageInfos = require(`${process.cwd()}/package.json`)
+let programConfigFile = false;
+try {
+  programConfigFile = require(`${process.cwd()}/foglet-config.js`);
+} catch (error) { 
+  console.log('No foglet-config.js file or an error occured: ', error);
+}
+
 
 program
   .version(packageInfos.version)
@@ -44,7 +51,7 @@ program.on('--help', () => {
 
 program.parse(process.argv)
 
-const config = readConfig(programPackageInfos)
+const config = readConfig(programPackageInfos, programConfigFile)
 
 if (config.browsers.length <= 0) {
   process.stderr.write('Error: you must specify at least one browser\n')
