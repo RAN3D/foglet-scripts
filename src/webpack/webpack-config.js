@@ -25,7 +25,7 @@ SOFTWARE.
 
 const merge = require('lodash.merge')
 
-const getConfig = (entry = 'index.js', output = null, webpack = null, lint = true) => {
+const getConfig = (entry = 'index.js', output = null, lint = true, custom = false) => {
   const webpackRules = [
     {
       test: /\.js$/,
@@ -60,8 +60,14 @@ const getConfig = (entry = 'index.js', output = null, webpack = null, lint = tru
     },
     devtool: 'source-map'
   }
-  if (webpack === null || webpack === undefined) return baseOptions
-  return merge(baseOptions, webpack)
+
+  let config = baseOptions;
+  if (custom) {
+    // console.log('We keep the custom build config.');
+    config = custom;
+  }
+  // console.log('WebpackConfig: ', JSON.stringify(config, null, '\t'));
+  return config;
 }
 
 module.exports = getConfig

@@ -28,13 +28,20 @@ const WebpackRunner = require('../src/webpack/webpack-runner.js')
 const readConfig = require('../src/read-config.js')
 const program = require('commander')
 const packageInfos = require('../package.json')
+
 const programPackageInfos = require(`${process.cwd()}/package.json`)
+let programConfigFile = false;
+try {
+  programConfigFile = require(`${process.cwd()}/foglet-config.js`);
+} catch (error) { 
+  console.log('No foglet-config.js file or an error occured: ', error);
+}
+
 const merge = require('lodash.merge');
 
 program
   .version(packageInfos.version)
   .description('Build foglet application using Webpack')
-  .option('-c, --config <filename>', '(OPTIONNAL) Specify the webpack config file (Ex: webpack-foglet-config.js)')
   .usage('[options]')
 
 program.on('--help', () => {
@@ -46,21 +53,9 @@ program.on('--help', () => {
 
 program.parse(process.argv)
 
-const config = readConfig(programPackageInfos)
-if(program.config){
-  // first read the webpack config
-  let configWebpackCustom = '';
-  try {
-    configWebpackCustom = require(`${process.cwd()}/${program.config}`);
-  } catch (error) {
-    console.error(error);
-  }
-  // then replace build option in the foglet-scripts config object by webpack config
-  config.build = merge(config.build, configWebpackCustom);
-}
+const config = readConfig(programPackageInfos, programConfigFile);
+const runner = new WebpackRunner(config);
 
-const runner = new WebpackRunner(config)
-console.dir(config);
 runner.run((err, stats) => {
   if (err || stats.hasErrors()) {
     console.error(err, stats.compilation.errors);

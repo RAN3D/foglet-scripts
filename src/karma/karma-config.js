@@ -34,29 +34,22 @@ const { constants } = require('karma')
  * @param {boolean} [lint=true] - True if files must be linted, False otherwise
  * @return {Object} Karma configuration
  */
-const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true) => {
+const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true, webpackRules = false) => {
   // configure webpack loaders
-  const webpackRules = [
-    {
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['env']
-        }
-      }
-    },
-    {
+  let webpackRulesKarma = [];
+  if(webpackRules) {
+    webpackRulesKarma = webpackRules;
+  }
+  webpackRulesKarma.push({
       test: /\.js$/,
       exclude: /(node_modules|bower_components)/,
       use: {
         loader: 'istanbul-instrumenter-loader'
       }
-    }
-  ]
+  })
+  
   if (lint) {
-    webpackRules.push({
+    webpackRulesKarma.push({
       enforce: 'pre',
       test: /\.js?$/,
       loader: 'standard-loader',
@@ -84,7 +77,7 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
     exclude,
     webpack: {
       module: {
-        rules: webpackRules
+        rules: webpackRulesKarma
       },
       devtool: 'source-map'
     },

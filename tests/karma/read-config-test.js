@@ -38,10 +38,27 @@ describe('Configuration reader', () => {
       build: {
         entry: './index.js',
         output: {
-          path: path.resolve(process.cwd(), 'dist'),
-          filename: '[name].js'
+          "path": require('path').resolve(process.cwd(), 'dist'),
+          "filename": "index.bundle.js",
+          "library": "index",
+          "libraryTarget": "umd",
+          "umdNamedDefine": true
         },
-        webpack: null
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              exclude: /(node_modules|bower_components)/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  presets: ['env']
+                }
+              }
+            }
+          ]
+        },
+        devtool: 'source-map'
       }
     }
     expect(config).toEqual(expected)
@@ -63,10 +80,66 @@ describe('Configuration reader', () => {
       build: {
         entry: './index.js',
         output: {
-          path: path.resolve(process.cwd(), 'dist'),
-          filename: '[name].js'
+          "path": require('path').resolve(process.cwd(), 'dist'),
+          "filename": "index.bundle.js",
+          "library": "index",
+          "libraryTarget": "umd",
+          "umdNamedDefine": true
         },
-        webpack: null
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              exclude: /(node_modules|bower_components)/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  presets: ['env']
+                }
+              }
+            }
+          ]
+        },
+        devtool: 'source-map'
+      }
+    }
+    expect(config).toEqual(expected)
+  })
+  it('should read a config from a config.js file (package.json config is override by the config.js file)', () => {
+    const packagePath = path.resolve(__dirname, '../samples/config.json')
+    const packageInfos = JSON.parse(fs.readFileSync(packagePath, { encoding: 'utf-8' }))
+    const configObject = require(path.resolve(__dirname, '../samples/default-config.js'));
+    // our config file will completely override package.json foglet-scripts informations
+    const config = readConfig(packageInfos, configObject);
+    const expected = {
+      browsers: [],
+      exclude: [],
+      timeout: 5000,
+      lint: true,
+      build: {
+        entry: './foglet-default.js',
+        output: {
+          "path": require('path').resolve(process.cwd(), 'dist'),
+          "filename": "default.bundle.js",
+          "library": "default",
+          "libraryTarget": "umd",
+          "umdNamedDefine": true
+        },
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              exclude: /(node_modules|bower_components)/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  presets: ['env']
+                }
+              }
+            }
+          ]
+        },
+        devtool: 'source-map'
       }
     }
     expect(config).toEqual(expected)
