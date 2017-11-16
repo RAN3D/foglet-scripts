@@ -32,9 +32,7 @@ const programPackageInfos = require(`${process.cwd()}/package.json`)
 let programConfigFile = false;
 try {
   programConfigFile = require(`${process.cwd()}/foglet-config.js`);
-} catch (error) { 
-  console.log('No foglet-config.js file or an error occured: ', error);
-}
+} catch (error) { console.log('No foglet-config.js found.'); }
 
 
 program
