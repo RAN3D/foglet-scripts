@@ -1,6 +1,6 @@
 {
   "name": "foglet-scripts",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/utils/utils.js",
   "bin": {
@@ -69,6 +69,7 @@
   },
   "jest": {
     "verbose": true,
-    "testRegex": "tests/.*/.*-test\\.js$"
+    "testRegex": "tests/.*/.*-test\\.js$",
+    "testEnvironment": "node"
   }
 }
