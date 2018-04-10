@@ -1,6 +1,6 @@
 {
   "name": "foglet-scripts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/utils/utils.js",
   "bin": {
