@@ -27,7 +27,7 @@ SOFTWARE.
 const childProcess = require('child_process')
 const program = require('commander')
 const packageInfos = require('../package.json')
-const SCRIPT_PATH = 'node_modules/foglet-signaling-server/express-signaling-server.js'
+const SCRIPT_PATH = 'node_modules/foglet-signaling-server/bin/express-signaling-server.js'
 
 function runScript (callback) {
   // keep track of whether callback has been invoked to prevent multiple invocations

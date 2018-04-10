@@ -1,6 +1,6 @@
 {
   "name": "foglet-scripts",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Build and test foglet applications with minimal configuration",
   "main": "src/utils/utils.js",
   "bin": {
@@ -35,7 +35,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "foglet-signaling-server": "^0.3.3",
+    "foglet-signaling-server": "^0.3.x",
     "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^2.0.0",
     "karma-chai": "^0.1.0",
