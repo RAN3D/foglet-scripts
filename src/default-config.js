@@ -6,11 +6,11 @@ module.exports = {
   build: {
     entry: './index.js',
     output: {
-      "path": require('path').resolve(process.cwd(), 'dist'),
-      "filename": "index.bundle.js",
-      "library": "index",
-      "libraryTarget": "umd",
-      "umdNamedDefine": true
+      'path': require('path').resolve(process.cwd(), 'dist'),
+      'filename': 'index.bundle.js',
+      'library': 'index',
+      'libraryTarget': 'umd',
+      'umdNamedDefine': true
     },
     module: {
       rules: [
@@ -28,4 +28,4 @@ module.exports = {
     },
     devtool: 'source-map'
   }
-};
+}

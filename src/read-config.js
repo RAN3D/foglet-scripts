@@ -24,9 +24,7 @@ SOFTWARE.
 'use strict'
 
 const merge = require('lodash.merge')
-const path = require('path')
-
-const DEFAULT_CONFIG = require('./default-config.js');
+const DEFAULT_CONFIG = require('./default-config.js')
 
 /**
  * Read config from a package.json file
@@ -35,14 +33,14 @@ const DEFAULT_CONFIG = require('./default-config.js');
  */
 const readConfig = (packageInfos, specifiedConfigFile = false) => {
   // we prefer the config file before the package.json informations
-  let config = DEFAULT_CONFIG;
-  if(specifiedConfigFile){
-    config = specifiedConfigFile;
+  let config = DEFAULT_CONFIG
+  if (specifiedConfigFile) {
+    config = specifiedConfigFile
   } else if ('foglet-scripts' in packageInfos) {
     config = merge(config, packageInfos['foglet-scripts'])
   }
   // console.log('ReadConfig: ', JSON.stringify(config, null, '\t'));
-  return config;
+  return config
 }
 
 module.exports = readConfig

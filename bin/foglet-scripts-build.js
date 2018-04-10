@@ -30,12 +30,12 @@ const program = require('commander')
 const packageInfos = require('../package.json')
 
 const programPackageInfos = require(`${process.cwd()}/package.json`)
-let programConfigFile = false;
+let programConfigFile = false
 try {
-  programConfigFile = require(`${process.cwd()}/foglet-config.js`);
-} catch (error) { console.log('No foglet-config.js found.'); }
-
-const merge = require('lodash.merge');
+  programConfigFile = require(`${process.cwd()}/foglet-config.js`)
+} catch (error) {
+  console.log('No foglet-config.js found.')
+}
 
 program
   .version(packageInfos.version)
@@ -51,12 +51,12 @@ program.on('--help', () => {
 
 program.parse(process.argv)
 
-const config = readConfig(programPackageInfos, programConfigFile);
-const runner = new WebpackRunner(config);
+const config = readConfig(programPackageInfos, programConfigFile)
+const runner = new WebpackRunner(config)
 
 runner.run((err, stats) => {
   if (err || stats.hasErrors()) {
-    console.error(err, stats.compilation.errors);
+    console.error(err, stats.compilation.errors)
     process.exit(1)
   }
   process.stdout.write(stats.toString({

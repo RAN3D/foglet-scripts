@@ -28,7 +28,7 @@ const getConfig = require('./webpack-config.js')
 
 class WebpackRunner {
   constructor (options) {
-    this._config = getConfig(options.build.entry, options.build.output, options.lint, options.build);
+    this._config = getConfig(options.build.entry, options.build.output, options.lint, options.build)
     this._runner = webpack(this._config)
   }
 

@@ -29,15 +29,15 @@ const readConfig = require('../src/read-config.js')
 const program = require('commander')
 const packageInfos = require('../package.json')
 const programPackageInfos = require(`${process.cwd()}/package.json`)
-let programConfigFile = false;
+let programConfigFile = false
 try {
-  programConfigFile = require(`${process.cwd()}/foglet-config.js`);
-} catch (error) { console.log('No foglet-config.js found.'); }
-
+  programConfigFile = require(`${process.cwd()}/foglet-config.js`)
+} catch (error) { console.log('No foglet-config.js found.') }
 
 program
   .version(packageInfos.version)
   .description('Run tests with Karma using the specified browsers')
+  .option('-k, --karma <karmaconfig>', 'Karma config path if needed, relative from root')
   .usage('[options]')
 
 program.on('--help', () => {
@@ -48,9 +48,14 @@ program.on('--help', () => {
 })
 
 program.parse(process.argv)
+let config = readConfig(programPackageInfos, programConfigFile)
+// rewrite the config cause we pass our custom config file
+let karmaConfig = program.karma
+console.log('Karma config location: ', karmaConfig)
 
-const config = readConfig(programPackageInfos, programConfigFile)
-
+if (karmaConfig) {
+  config = require(`${process.cwd()}/${karmaConfig}`)
+}
 if (config.browsers.length <= 0) {
   process.stderr.write('Error: you must specify at least one browser\n')
   process.exit(1)

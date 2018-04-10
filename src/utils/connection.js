@@ -38,10 +38,10 @@ const pathConnect = (peers, duplex = false) => {
   }
   return Promise.all(pairs.map(pair => {
     return pair[0].connection(pair[1])
-    .then(() => {
-      if (duplex) return pair[1].connection(pair[0])
-      return Promise.resolve()
-    })
+      .then(() => {
+        if (duplex) return pair[1].connection(pair[0])
+        return Promise.resolve()
+      })
   }))
 }
 
@@ -57,10 +57,10 @@ const pathConnect = (peers, duplex = false) => {
 const starConnect = (center, peers, duplex = false) => {
   return Promise.all(peers.map(peer => {
     return center.connection(peer)
-    .then(() => {
-      if (duplex) return peer.connection(center)
-      return Promise.resolve()
-    })
+      .then(() => {
+        if (duplex) return peer.connection(center)
+        return Promise.resolve()
+      })
   }))
 }
 

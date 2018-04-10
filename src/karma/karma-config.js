@@ -36,18 +36,18 @@ const { constants } = require('karma')
  */
 const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true, webpackRules = false) => {
   // configure webpack loaders
-  let webpackRulesKarma = [];
-  if(webpackRules) {
-    webpackRulesKarma = webpackRules;
+  let webpackRulesKarma = []
+  if (webpackRules) {
+    webpackRulesKarma = webpackRules
   }
   webpackRulesKarma.push({
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'istanbul-instrumenter-loader'
-      }
+    test: /\.js$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+      loader: 'istanbul-instrumenter-loader'
+    }
   })
-  
+
   if (lint) {
     webpackRulesKarma.push({
       enforce: 'pre',
@@ -88,7 +88,10 @@ const getKarmaConfig = (browsers = [], exclude = [], timeout = 5000, lint = true
     port: 3001,
     expressHttpServer: {
       port: 4001,
-      appVisitor: signaling
+      appVisitor: (app, log, host = 'localhost', port = 3000) => {
+        signaling.bind(null, [app, log, host, port])
+        return signaling
+      }
     },
     reporters: [ 'mocha', 'coverage' ],
     coverageIstanbulReporter: {

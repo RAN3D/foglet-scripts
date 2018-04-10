@@ -31,8 +31,8 @@ class KarmaRunner extends EventEmitter {
   constructor (jsonConfig, callback) {
     super()
     this._jsonConfig = jsonConfig
-    const webpackRules = jsonConfig.build && jsonConfig.build.module && jsonConfig.build.module.rules || false;
-    this._karmaConfig = getConfig(jsonConfig.browsers, jsonConfig.exclude, jsonConfig.timeout, jsonConfig.lint, webpackRules);
+    const webpackRules = (jsonConfig.build && jsonConfig.build.module && jsonConfig.build.module.rules) || false
+    this._karmaConfig = getConfig(jsonConfig.browsers, jsonConfig.exclude, jsonConfig.timeout, jsonConfig.lint, webpackRules)
     this._server = new Server(this._karmaConfig, exitCode => {
       callback(exitCode)
       stopper.stop({ port: this._karmaConfig.port })

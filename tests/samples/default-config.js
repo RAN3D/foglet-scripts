@@ -6,11 +6,11 @@ module.exports = {
   build: {
     entry: './foglet-default.js',
     output: {
-      "path": require('path').resolve(process.cwd(), 'dist'),
-      "filename": "default.bundle.js",
-      "library": "default",
-      "libraryTarget": "umd",
-      "umdNamedDefine": true
+      'path': require('path').resolve(process.cwd(), 'dist'),
+      'filename': 'default.bundle.js',
+      'library': 'default',
+      'libraryTarget': 'umd',
+      'umdNamedDefine': true
     },
     module: {
       rules: [
@@ -28,4 +28,4 @@ module.exports = {
     },
     devtool: 'source-map'
   }
-};
+}

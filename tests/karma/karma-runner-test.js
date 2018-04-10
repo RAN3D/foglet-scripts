@@ -23,22 +23,22 @@ SOFTWARE.
 */
 'use strict'
 
-const readConfig = require('../../src/read-config.js');
+const readConfig = require('../../src/read-config.js')
 const KarmaRunner = require('../../src/karma/karma-runner.js')
 jest.setTimeout(30000)
 describe('Karma test runner', () => {
   it('should start without crashing using default configuration', done => {
     const config = readConfig({
-      "foglet-scripts": {
-        "browsers": [
-          "Firefox"
+      'foglet-scripts': {
+        'browsers': [
+          'Firefox'
         ],
-        "exclude": [
-          "tests/karma/*.js",
-          "tests/utils/*.js"
+        'exclude': [
+          'tests/karma/*.js',
+          'tests/utils/*.js'
         ]
       }
-    }, false);
+    }, false)
     const runner = new KarmaRunner(config, exitCode => {
       expect(exitCode).toBe(0)
       done()
